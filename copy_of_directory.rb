@@ -1,18 +1,3 @@
-#let's put all students into an array
-@students = [
-  {name: "Dr. Hannibal Lecter", cohort: :november},
-  {name: "Darth Vader", cohort: :november},
-  {name: "Nurse Ratched", cohort: :november},
-  {name: "Michael Carleone", cohort: :november},
-  {name: "Alex DeLarge", cohort: :november},
-  {name: "The Wicked Witch of the West", cohort: :november},
-  {name: "Terminator", cohort: :november},
-  {name: "Freddy Krueger", cohort: :november},
-  {name: "The Joker", cohort: :november},
-  {name: "Joffrey Baratheon", cohort: :november},
-  {name: "Norman Bates", cohort: :november}
-]
-
 def print_header
   puts "The students of Cats Academy"
   puts "-------------"
@@ -53,8 +38,8 @@ def students_with_short_names(students)
   end 
 end
 
-def print_footer(names)
-  puts "Overall, we have #{names.count} great #{students_string_for_count(@students.count)}".center(80)
+def print_footer(students)
+  puts "Overall, we have #{students.count} great #{students_string_for_count(students.count)}".center(80)
 end
 
 def students_string_for_count(count)
@@ -65,7 +50,7 @@ def students_string_for_count(count)
   end
 end
 
-def input_students
+def input_students(students)
   puts "Please enter the names of the students".center(80)
   puts "To finish, just hit return twice".center(80)
   
@@ -81,23 +66,55 @@ def input_students
     nationality = gets.chomp
 
     # add the student hash to the array
-    @students << {name: name, cohort: cohort, nationality: nationality}
-    puts "Now we have #{@students.count} #{students_string_for_count(@students.count)}".center(80)
+    students << {name: name, cohort: cohort, nationality: nationality}
+    puts "Now we have #{students.count} #{students_string_for_count(students.count)}".center(80)
     # get another name from the user
     name = gets.chomp
   end
+
+  students
 end
 
-input_students
-print_header
+def print(students)
+  print_names_by_cohort(students)
+end
 
-# print_names(students)
+def interactive_menu
+  students = [
+    {name: "Dr. Hannibal Lecter", cohort: :november},
+    {name: "Darth Vader", cohort: :november},
+    {name: "Nurse Ratched", cohort: :november},
+    {name: "Michael Carleone", cohort: :november},
+    {name: "Alex DeLarge", cohort: :november},
+    {name: "The Wicked Witch of the West", cohort: :november},
+    {name: "Terminator", cohort: :november},
+    {name: "Freddy Krueger", cohort: :november},
+    {name: "The Joker", cohort: :november},
+    {name: "Joffrey Baratheon", cohort: :november},
+    {name: "Norman Bates", cohort: :november}
+  ]
 
-# puts "Enter first letter of name to filter by"
-# print_names(students_starting_with_letter(students, gets.chomp))
+  loop do
+    # 1. print the menu and ask the user what to do
+    puts "1. Input the students"
+    puts "2. Show the students"
+    puts "9. Exit" # 9 because we'll be adding more items
+    # 2. read the input and save it into a variable
+    selection = gets.chomp
+    # 3. do what the user has asked
+    case selection
+    when "1"
+      students = input_students(students)
+    when "2"
+      print_header
+      print(students)
+      print_footer(students)
+    when "9"
+      exit # this will cause the program to terminate
+    else
+      puts "I don't know what you meant, try again"
+    end
+  end
+end
 
-# require 'pry'
-# binding.pry
-print_names_by_cohort(students_with_short_names(@students))
-
-print_footer(@students)
+interactive_menu
